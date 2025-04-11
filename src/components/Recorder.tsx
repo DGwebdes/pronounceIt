@@ -9,6 +9,7 @@ const Recorder = ({ onRecordingComplete }: RecorderProps) => {
     const startRecording = () => {
         console.log("Recording");
         setRecording(true);
+        onRecordingComplete("Much love");
     };
     const stopRecording = () => {
         console.log("Stopped");
