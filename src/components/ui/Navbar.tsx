@@ -10,11 +10,11 @@ const Navbar = () => {
             <div className="text-xl font-bold dark:text-white">PronounceIt</div>
             <div className="hidden md:flex space-x-4 dark:text-white">
                 <button onClick={toggleTheme}>
-                    {theme === "light" ? "🌙 dark" : "☀️ light"}
+                    {theme === "light" ? "🌙" : "☀️"}
                 </button>
-                <a href="#" className="hover:underline">
+                {/* <a href="#" className="hover:underline">
                     About
-                </a>
+                </a> */}
             </div>
 
             <div className="md:hidden flex items-center">
@@ -28,11 +28,11 @@ const Navbar = () => {
             {menuOpen && (
                 <div className="absolute top-16 left-0 w-full bg-white dark:bg-gray-800 p-4 md:hidden flex flex-col space-y-2">
                     <button onClick={toggleTheme}>
-                        {theme === "light" ? "🌙 dark" : "☀️ light"}
+                        {theme === "light" ? "🌙" : "☀️"}
                     </button>
-                    <a href="#" className="hover:underline">
+                    {/* <a href="#" className="hover:underline">
                         About
-                    </a>
+                    </a> */}
                 </div>
             )}
         </nav>
