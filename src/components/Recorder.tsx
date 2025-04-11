@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 interface RecorderProps {
     onRecordingComplete: (audioURL: string) => void;
@@ -6,14 +6,44 @@ interface RecorderProps {
 
 const Recorder = ({ onRecordingComplete }: RecorderProps) => {
     const [recording, setRecording] = useState(false);
-    const startRecording = () => {
-        console.log("Recording");
-        setRecording(true);
-        onRecordingComplete("Much love");
+
+    const mediaRecorder = useRef<MediaRecorder | null>(null);
+    const chunks = useRef<Blob[]>([]);
+
+    const startRecording = async () => {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({
+                audio: true,
+            });
+
+            mediaRecorder.current = new MediaRecorder(stream);
+            mediaRecorder.current.ondataavailable = (e: BlobEvent) => {
+                if (e.data.size > 0) {
+                    chunks.current.push(e.data);
+                }
+            };
+
+            mediaRecorder.current.onstop = () => {
+                const audioBlog = new Blob(chunks.current, {
+                    type: "audio/wav",
+                });
+                const url = URL.createObjectURL(audioBlog);
+                onRecordingComplete(url);
+                chunks.current = [];
+            };
+            mediaRecorder.current.start();
+            setRecording(true);
+        } catch (error) {
+            console.error("Error fetching audio: ", error);
+            setRecording(false);
+        }
     };
+
     const stopRecording = () => {
-        console.log("Stopped");
-        setRecording(false);
+        if (mediaRecorder.current) {
+            mediaRecorder.current.stop();
+            setRecording(false);
+        }
     };
 
     return (
